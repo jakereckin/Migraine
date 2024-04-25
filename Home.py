@@ -9,7 +9,6 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 
-@st.cache_resource
 def get_client():
     uri = st.secrets["mongo"]["connection_string"]
     # Create a new client and connect to the server
