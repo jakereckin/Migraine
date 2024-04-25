@@ -9,12 +9,12 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 
-
-
-
+@st.cache_resource
 def get_client():
-    connection_string = st.secrets["mongo"]["connection_string"]
-    return MongoClient(connection_string)
+    uri = st.secrets["mongo"]["connection_string"]
+    # Create a new client and connect to the server
+    client = MongoClient(uri, server_api=ServerApi('1'))
+    return client
 
 def get_my_dbs(client):
     my_db = client['HEALTH']
@@ -31,9 +31,7 @@ def to_pandas_frame(garmin, migraine):
     return full_frame
 
 client = get_client()
-st.write('Connected...')
 garmin, migraine = get_my_dbs(client)
-st.write('Got DBS...')
 full_frame = to_pandas_frame(garmin=garmin,
                              migraine=migraine)
 
