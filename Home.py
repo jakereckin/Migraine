@@ -11,10 +11,7 @@ from pymongo.server_api import ServerApi
 
 
 def get_client():
-    my_screat = st.secrets['password']
-    my_screat = str(my_screat)
-    uri = f"mongodb+srv://nda-admin:{my_screat}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-    st.write(uri)
+    uri = st.write(f"mongodb+srv://nda-admin:{st.secrets.get('mongo')['DB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
     # Create a new client and connect to the server
     client = MongoClient(uri, server_api=ServerApi('1'))
     # Send a ping to confirm a successful connection

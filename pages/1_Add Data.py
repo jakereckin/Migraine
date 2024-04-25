@@ -11,13 +11,13 @@ from pymongo.server_api import ServerApi
 
 
 def get_client():
-    uri = f"mongodb+srv://nda-admin:{st.secrets['password']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    uri = f"mongodb+srv://nda-admin:{st.secrets.get('mongo')['DB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     # Create a new client and connect to the server
     client = MongoClient(uri, server_api=ServerApi('1'))
     # Send a ping to confirm a successful connection
     try:
         client.admin.command('ping')
-        st.write(("Pinged your deployment. You successfully connected to MongoDB!"))
+        print("Pinged your deployment. You successfully connected to MongoDB!")
         return client
     except Exception as e:
         print(e)
