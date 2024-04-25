@@ -11,7 +11,9 @@ from pymongo.server_api import ServerApi
 
 
 def get_client():
-    uri = f"mongodb+srv://nda-admin:{st.secrets['DB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    my_screat = st.secrets['DB_PASSWORD']
+    my_screat = str(my_screat)
+    uri = f"mongodb+srv://nda-admin:{my_screat}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     st.write(uri)
     # Create a new client and connect to the server
     client = MongoClient(uri, server_api=ServerApi('1'))
@@ -37,7 +39,6 @@ def to_pandas_frame(garmin, migraine):
                     .reset_index(drop=True))
     return full_frame
 
-st.write(st.secrets['DB_PASSWORD'])
 client = get_client()
 garmin, migraine = get_my_dbs(client)
 full_frame = to_pandas_frame(garmin=garmin,
