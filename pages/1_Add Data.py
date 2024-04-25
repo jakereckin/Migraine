@@ -10,17 +10,10 @@ from pymongo.server_api import ServerApi
 
 
 
+@st.cache_resource
 def get_client():
-    uri = f"mongodb+srv://nda-admin:{st.secrets.get('mongo')['DB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-    # Create a new client and connect to the server
-    client = MongoClient(uri, server_api=ServerApi('1'))
-    # Send a ping to confirm a successful connection
-    try:
-        client.admin.command('ping')
-        print("Pinged your deployment. You successfully connected to MongoDB!")
-        return client
-    except Exception as e:
-        print(e)
+    connection_string = st.secrets["mongo"]["connection_string"]
+    return MongoClient(connection_string)
 
 def get_my_db(client):
     my_db = client['HEALTH']
