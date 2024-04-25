@@ -37,6 +37,7 @@ def to_pandas_frame(garmin, migraine):
     return full_frame
 
 client = get_client()
+st.write(client)
 garmin, migraine = get_my_dbs(client)
 full_frame = to_pandas_frame(garmin=garmin,
                              migraine=migraine)
