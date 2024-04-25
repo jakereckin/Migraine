@@ -36,7 +36,7 @@ def to_pandas_frame(garmin, migraine):
                     .reset_index(drop=True))
     return full_frame
 
-st.write(st.secrets.get('mongo'))
+st.write(st.secrets.get('mongo')['DB_PASSWORD'])
 client = get_client()
 garmin, migraine = get_my_dbs(client)
 full_frame = to_pandas_frame(garmin=garmin,
