@@ -14,7 +14,7 @@ def get_client():
     uri = st.secrets["mongo"]["connection_string"]
     # Create a new client and connect to the server
     client = MongoClient(uri, server_api=ServerApi('1'))
-    st.write(client)
+    st.write(client.admin.command('ping'))
     return client
 
 def get_my_dbs(client):
