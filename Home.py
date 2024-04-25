@@ -12,7 +12,6 @@ def get_client():
     uri =  f"mongodb+srv://nda-admin:{st.secrets['mongo']['MONGODB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     # Create a new client and connect to the server
     client = MongoClient(uri, server_api=ServerApi('1'))
-    st.write(client.admin.command('ping'))
     return client
 
 def get_my_dbs(client):
