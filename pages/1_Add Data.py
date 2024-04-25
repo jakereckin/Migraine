@@ -10,7 +10,6 @@ from pymongo.server_api import ServerApi
 
 
 
-@st.cache_resource
 def get_client():
     connection_string = st.secrets["mongo"]["connection_string"]
     return MongoClient(connection_string)
