@@ -8,6 +8,7 @@ import pandas as pd
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
+@st.cache_resource
 def get_client():
     uri =  f"mongodb+srv://nda-admin:{st.secrets['mongo']['MONGODB_PASSWORD']}@cluster0.jd3nwb7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     # Create a new client and connect to the server
@@ -28,9 +29,12 @@ def to_pandas_frame(garmin, migraine):
                     .reset_index(drop=True))
     return full_frame
 
-client = get_client()
-garmin, migraine = get_my_dbs(client)
-full_frame = to_pandas_frame(garmin=garmin,
-                             migraine=migraine)
+password_box = st.text_input(label='Enter Password', 
+                             type='password')
+if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
+    client = get_client()
+    garmin, migraine = get_my_dbs(client)
+    full_frame = to_pandas_frame(garmin=garmin,
+                                migraine=migraine)
 
-st.dataframe(full_frame)
+    st.dataframe(full_frame)

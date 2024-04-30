@@ -38,60 +38,62 @@ def update_db(migraine,
         migraine.insert_many(data_list, bypass_document_validation=True)
     return None
 
-client = get_client()
-migrane, current_data = get_my_db(client)
-entry_types = ['Add Alcohol',
-               'Add Morning Meditation',
-               'Add Evening Meditation',
-               'Add Traveling',
-               'Add Pushups',
-               'Add Planks',
-               'Add Morning Happiness',
-               'Add Night Happiness',
-               'Add Magneisum',
-               'Add Tylenol',
-               'Add Migraine']
-date = st.date_input(label='Enter Date')
-if date:
-    choice = st.selectbox(label='Choose Event',
-                          options=entry_types)
-    if choice == 'Add Alcohol':
-        value = st.number_input(label='Drink Count', step=1)
-        submit = st.button(label='Submit')
-    elif choice in ['Add Morning Meditation',
-                    'Add Evening Meditation',
-                    'Add Planks']:
-        value = st.number_input(label='Minutes', step=1)
-        submit = st.button(label='Submit')
-    elif choice in ['Add Morning Happiness',
-                    'Add Night Happiness']:
-        value = st.number_input(label='Happiness Level',
-                                min_value=0,
-                                max_value=10,
-                                step=1)
-        submit = st.button(label='Submit')
-    elif choice in ['Add Traveling',
-                    'Add Magneisum',
-                    'Add Tylenol',
-                    'Add Migraine']:
-        value = st.radio(label='Flag', options=['Y', 'N'])
-        submit = st.button(label='Submit')
-    elif choice == 'Add Pushups':
-        value = st.number_input(label='Count', step=5)
-        submit = st.button(label='Submit')
+password_box = st.text_input(label='Enter Password')
+if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
+    client = get_client()
+    migrane, current_data = get_my_db(client)
+    entry_types = ['Add Alcohol',
+                'Add Morning Meditation',
+                'Add Evening Meditation',
+                'Add Traveling',
+                'Add Pushups',
+                'Add Planks',
+                'Add Morning Happiness',
+                'Add Night Happiness',
+                'Add Magneisum',
+                'Add Tylenol',
+                'Add Migraine']
+    date = st.date_input(label='Enter Date')
+    if date:
+        choice = st.selectbox(label='Choose Event',
+                            options=entry_types)
+        if choice == 'Add Alcohol':
+            value = st.number_input(label='Drink Count', step=1)
+            submit = st.button(label='Submit')
+        elif choice in ['Add Morning Meditation',
+                        'Add Evening Meditation',
+                        'Add Planks']:
+            value = st.number_input(label='Minutes', step=1)
+            submit = st.button(label='Submit')
+        elif choice in ['Add Morning Happiness',
+                        'Add Night Happiness']:
+            value = st.number_input(label='Happiness Level',
+                                    min_value=0,
+                                    max_value=10,
+                                    step=1)
+            submit = st.button(label='Submit')
+        elif choice in ['Add Traveling',
+                        'Add Magneisum',
+                        'Add Tylenol',
+                        'Add Migraine']:
+            value = st.radio(label='Flag', options=['Y', 'N'])
+            submit = st.button(label='Submit')
+        elif choice == 'Add Pushups':
+            value = st.number_input(label='Count', step=5)
+            submit = st.button(label='Submit')
 
-    if submit:
-        my_frame = pd.DataFrame([[date, choice, value]],
-                         columns=['DATE', 'DATA_LABEL', 'VALUE']
-        )
-        my_frame['DATE'] = pd.to_datetime(my_frame['DATE']).dt.strftime('%m/%d/%Y')
-        my_frame['_id'] = (my_frame['DATE']
-                        + '_'
-                        + my_frame['DATA_LABEL']
-        )
-        update_db(migraine=migrane,
-                  my_df=my_frame,
-                  current_data=current_data)
-        time.sleep(.5)
-        st.write(f'Added {choice} to DB for {date}')
+        if submit:
+            my_frame = pd.DataFrame([[date, choice, value]],
+                            columns=['DATE', 'DATA_LABEL', 'VALUE']
+            )
+            my_frame['DATE'] = pd.to_datetime(my_frame['DATE']).dt.strftime('%m/%d/%Y')
+            my_frame['_id'] = (my_frame['DATE']
+                            + '_'
+                            + my_frame['DATA_LABEL']
+            )
+            update_db(migraine=migrane,
+                    my_df=my_frame,
+                    current_data=current_data)
+            time.sleep(.5)
+            st.write(f'Added {choice} to DB for {date}')
 #get_client()
