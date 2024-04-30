@@ -22,11 +22,17 @@ def get_my_dbs(client):
     return garmin, migraine
 
 def to_pandas_frame(garmin, migraine):
-    garmin_df = pd.DataFrame(list(garmin.find())).drop(columns=['_id'])
-    migraine_df = pd.DataFrame(list(migraine.find())).drop(columns=['_id'])
+    garmin_df = (pd.DataFrame(list(garmin.find()))
+                   .drop(columns=['_id'])
+    )
+    migraine_df = (pd.DataFrame(list(migraine.find()))
+                     .drop(columns=['_id'])
+    )
     full_frame = (pd.concat([garmin_df,
                              migraine_df])
-                    .reset_index(drop=True))
+                    .reset_index(drop=True)
+                    .sort_values(by=['DATE'])
+    )
     return full_frame
 
 password_box = st.text_input(label='Enter Password', 
