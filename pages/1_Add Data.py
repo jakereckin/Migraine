@@ -38,7 +38,8 @@ def update_db(migraine,
         migraine.insert_many(data_list, bypass_document_validation=True)
     return None
 
-password_box = st.text_input(label='Enter Password')
+password_box = st.text_input(label='Enter Password',
+                             type='password')
 if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
     client = get_client()
     migrane, current_data = get_my_db(client)
