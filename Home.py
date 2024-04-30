@@ -37,4 +37,7 @@ if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
     full_frame = to_pandas_frame(garmin=garmin,
                                 migraine=migraine)
 
-    st.dataframe(full_frame)
+    st.dataframe(full_frame,
+                 use_container_width=True,
+                 hide_index=True
+    )
