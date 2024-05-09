@@ -53,7 +53,8 @@ if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
                 'Add Night Happiness',
                 'Add Magneisum',
                 'Add Tylenol',
-                'Add Migraine']
+                'Add Migraine',
+                'Add Creatine']
     date = st.date_input(label='Enter Date')
     if date:
         choice = st.selectbox(label='Choose Event',
@@ -76,6 +77,7 @@ if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
         elif choice in ['Add Traveling',
                         'Add Magneisum',
                         'Add Tylenol',
+                        'Add Creatine',
                         'Add Migraine']:
             value = st.radio(label='Flag', options=['Y', 'N'])
             submit = st.button(label='Submit')
