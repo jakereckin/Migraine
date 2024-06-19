@@ -22,28 +22,25 @@ def get_my_dbs(client):
     return garmin, migraine
 
 def to_pandas_frame(garmin, migraine):
+
     garmin_df = (pd.DataFrame(list(garmin.find()))
                    .drop(columns=['_id'])
     )
     migraine_df = (pd.DataFrame(list(migraine.find()))
                      .drop(columns=['_id'])
     )
-    full_frame = (pd.concat([garmin_df,
-                             migraine_df])
+    full_frame = (pd.concat([garmin_df, migraine_df])
                     .reset_index(drop=True)
-                    .sort_values(by=['DATE'])
+                    .sort_values(by=['DATE'],
+                                 ascending=False)
     )
     return full_frame
 
-password_box = st.text_input(label='Enter Password', 
-                             type='password')
+password_box = st.text_input(label='Enter Password', type='password')
+
 if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
     client = get_client()
     garmin, migraine = get_my_dbs(client)
-    full_frame = to_pandas_frame(garmin=garmin,
-                                migraine=migraine)
+    full_frame = to_pandas_frame(garmin=garmin, migraine=migraine)
 
-    st.dataframe(full_frame,
-                 use_container_width=True,
-                 hide_index=True
-    )
+    st.dataframe(full_frame, use_container_width=True, hide_index=True)

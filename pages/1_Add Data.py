@@ -26,20 +26,22 @@ def update_db(migraine,
               current_data):
     if len(current_data) > 0:
         my_df_test = pd.merge(current_data.drop(columns=['VALUE']),
-                            my_df,
-                            on=['_id',
-                                'DATE',
-                                'DATA_LABEL'],
-                                how='outer',
-                                indicator='exists')
-        my_df = my_df_test[my_df_test['exists']=='right_only'].drop(columns=['exists'])
+                              my_df,
+                              on=['_id', 'DATE', 'DATA_LABEL'],
+                              how='outer',
+                              indicator='exists'
+        )
+        my_df = (my_df_test[my_df_test['exists']=='right_only']
+                 .drop(columns=['exists'])
+        )
+
     if len(my_df) > 0:
         data_list = my_df.to_dict('records')
         migraine.insert_many(data_list, bypass_document_validation=True)
     return None
 
-password_box = st.text_input(label='Enter Password',
-                             type='password')
+password_box = st.text_input(label='Enter Password', type='password')
+
 if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
     client = get_client()
     migrane, current_data = get_my_db(client)
@@ -57,8 +59,7 @@ if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
                 'Add Creatine']
     date = st.date_input(label='Enter Date')
     if date:
-        choice = st.selectbox(label='Choose Event',
-                            options=entry_types)
+        choice = st.selectbox(label='Choose Event', options=entry_types)
         if choice == 'Add Alcohol':
             value = st.number_input(label='Drink Count', step=1)
             submit = st.button(label='Submit')
@@ -79,24 +80,30 @@ if password_box == st.secrets['mongo']['PAGE_PASSWORD']:
                         'Add Tylenol',
                         'Add Creatine',
                         'Add Migraine']:
+            
             value = st.radio(label='Flag', options=['Y', 'N'])
             submit = st.button(label='Submit')
+
         elif choice == 'Add Pushups':
             value = st.number_input(label='Count', step=5)
             submit = st.button(label='Submit')
 
         if submit:
             my_frame = pd.DataFrame([[date, choice, value]],
-                            columns=['DATE', 'DATA_LABEL', 'VALUE']
+                                    columns=['DATE', 'DATA_LABEL', 'VALUE']
             )
-            my_frame['DATE'] = pd.to_datetime(my_frame['DATE']).dt.strftime('%m/%d/%Y')
+            my_frame['DATE'] = (pd.to_datetime(my_frame['DATE'])
+                                  .dt
+                                  .strftime('%m/%d/%Y')
+            )
             my_frame['_id'] = (my_frame['DATE']
-                            + '_'
-                            + my_frame['DATA_LABEL']
+                               + '_'
+                               + my_frame['DATA_LABEL']
             )
-            update_db(migraine=migrane,
-                    my_df=my_frame,
-                    current_data=current_data)
+            update_db(migraine=migrane, 
+                      my_df=my_frame, 
+                      current_data=current_data
+            )
             time.sleep(.5)
             st.write(f'Added {choice} to DB for {date}')
 #get_client()
